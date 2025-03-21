@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirdropQuest</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #1e2a44;
+        color: #ffffff;
+      }
+      /* Navbar Styling */
+      nav {
+        width: 100%;
+        background-color: #2d3a58;
+        padding: 1rem 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between; /* Changed to space-between for logo + links */
+        align-items: center;
+        padding: 0 1rem; /* Added padding for better spacing */
+      }
+      .nav-logo {
+        height: 40px; /* Adjust size as needed */
+        width: auto;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+      }
+      .nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: #a084ca;
+      }
+      .hamburger {
+        display: none; /* Hidden by default on desktop */
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: #ffffff;
+        cursor: pointer;
+      }
+      .container {
+        background: #2d3a58;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        width: 100%;
+        max-width: 600px;
+        margin-top: 80px; /* Increased to account for taller navbar */
+      }
+      .hero-section {
+        margin-bottom: 2rem;
+      }
+      .hero-title {
+        font-size: 2.5rem;
+        color: #d7b9d5;
+        margin-bottom: 1rem;
+      }
+      .hero-text {
+        font-size: 1.2rem;
+        color: #a084ca;
+        margin-bottom: 0.5rem;
+      }
+      .hero-img {
+        width: 500px;
+        height: 500px;
+      }
+      .cta-btn {
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        background-color: #3a5fcd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        margin-top: 1rem;
+      }
+      .cta-btn:hover {
+        background-color: #a084ca;
+      }
+      .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #3a5fcd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #a084ca;
+      }
+      .btn:disabled {
+        background-color: #666666;
+        cursor: not-allowed;
+      }
+      h1 {
+        color: #d7b9d5;
+        margin-bottom: 1.5rem;
+      }
+      .input-group {
+        margin-bottom: 1rem;
+      }
+      input[type="password"],
+      input[type="email"] {
+        padding: 0.5rem;
+        width: 250px;
+        border: 1px solid #d7b9d5;
+        border-radius: 4px;
+        font-size: 1rem;
+        background-color: #2d3a58;
+        color: #ffffff;
+      }
+      input[type="password"]:focus,
+      input[type="email"]:focus {
+        outline: none;
+        border-color: #a084ca;
+        box-shadow: 0 0 5px rgba(160, 132, 202, 0.5);
+      }
+      #passwordSection,
+      #emailSection {
+        display: none;
+      }
+      #message,
+      #passwordMessage {
+        margin-top: 1rem;
+        color: #d7b9d5;
+      }
+      #message.success {
+        color: rgb(217, 206, 233);
+      }
+      #message.error,
+      #passwordMessage {
+        color: #d7b9d5;
+      }
+
+      /* Tablet (max-width: 768px) */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1.5rem;
+          max-width: 90%;
+          margin-top: 70px; /* Adjusted for navbar with logo */
+        }
+        .hero-title {
+          font-size: 2rem;
+        }
+        .hero-text {
+          font-size: 1rem;
+        }
+        .hero-img {
+          width: 200px;
+          height: 200px;
+        }
+        .cta-btn {
+          padding: 10px 20px;
+          font-size: 1rem;
+        }
+        .btn-container {
+          flex-direction: column;
+          gap: 15px;
+        }
+        .btn {
+          padding: 8px 16px;
+          font-size: 14px;
+        }
+        input[type="password"],
+        input[type="email"] {
+          width: 100%; /* Full width on smaller screens */
+          max-width: 300px;
+        }
+        .nav-container {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 0.5rem 1rem;
+        }
+        .nav-links {
+          flex-direction: column;
+          width: 100%;
+          display: none; /* Hidden by default, shown via JS */
+        }
+        .nav-links.active {
+          display: flex; /* Shown when hamburger clicked */
+        }
+        .nav-links a {
+          width: 100%;
+          text-align: left;
+          padding: 0.75rem 1rem;
+        }
+        .hamburger {
+          display: block; /* Visible on tablet and mobile */
+          position: absolute;
+          right: 1rem;
+          top: 1rem;
+        }
+        .nav-logo {
+          height: 35px; /* Slightly smaller on tablet */
+        }
+      }
+
+      /* Mobile (max-width: 480px) */
+      @media (max-width: 480px) {
+        .container {
+          padding: 1rem;
+          margin-top: 60px;
+        }
+        .hero-title {
+          font-size: 1.5rem;
+        }
+        .hero-text {
+          font-size: 0.9rem;
+        }
+        .cta-btn {
+          padding: 8px 16px;
+          font-size: 0.9rem;
+        }
+        .btn {
+          padding: 6px 12px;
+          font-size: 12px;
+        }
+        h1 {
+          font-size: 1.2rem;
+        }
+        input[type="password"],
+        input[type="email"] {
+          width: 100%;
+          max-width: 250px;
+          font-size: 0.9rem;
+        }
+        #message,
+        #passwordMessage {
+          font-size: 0.9rem;
+        }
+        .nav-links a {
+          font-size: 0.9rem;
+          padding: 0.5rem;
+        }
+        .nav-logo {
+          height: 30px; /* Smaller on mobile */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Section -->
+    <nav>
+      <div class="nav-container">
+        <img
+          src="https://i.postimg.cc/vHV32njD/T-1.png"
+          alt="Dummy Logo"
+          class="nav-logo"
+        />
+        <div class="nav-links">
+          <a
+            href="https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ"
+            >Home</a
+          >
+          <a
+            href="https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ"
+            >About</a
+          >
+          <a
+            href="https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ"
+            >Airdrops</a
+          >
+          <a
+            href="https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ"
+            >Contact</a
+          >
+        </div>
+      </div>
+      <button class="hamburger">☰</button>
+    </nav>
+
+    <div class="container">
+      <div class="hero-section">
+        <img
+          src="https://i.postimg.cc/vHV32njD/T-1.png"
+          alt="Dummy Logo"
+          class="hero-img"
+        />
+        <h1 class="hero-title">TokenTreasure</h1>
+        <p class="hero-text">Discover Hidden Gems in the Crypto World</p>
+        <p class="hero-text">
+          Unlock Exclusive Airdrops and Claim Your Free Tokens Today!
+        </p>
+        <button
+          class="cta-btn"
+          onclick="window.open('https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ', '_blank')"
+        >
+          Get Your Free Tokens Here
+        </button>
+        <p>Watch the video to get the password and unlock the airdrop</p>
+      </div>
+
+      <h1>AirdropQuest</h1>
+      <div class="btn-container">
+        <button class="btn" id="watchVideoBtn">Watch Video</button>
+        <button class="btn" id="unlockAirdropBtn" disabled>
+          Unlock Airdrop
+        </button>
+      </div>
+
+      <div id="passwordSection">
+        <div class="input-group">
+          <input
+            type="password"
+            id="passwordInput"
+            placeholder="Enter password from video"
+          />
+          <button class="btn" onclick="checkPassword()">Submit</button>
+        </div>
+        <div id="passwordMessage"></div>
+      </div>
+
+      <div id="emailSection">
+        <div class="input-group">
+          <input
+            type="email"
+            id="emailInput"
+            placeholder="Enter your email"
+            required
+          />
+          <button class="btn" onclick="submitEmail()">Submit Email</button>
+        </div>
+        <div id="message"></div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      const CORRECT_PASSWORD = "41708";
+      const affiliateLink =
+        "https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ";
+
+      const aff_link_2 =
+        "https://juhevomu.com/b/3mVQ0.Pp3ZpLvQb_mcVEJEZhDp0N2/MtTckZz/MCjfgExhLyTbYRxoOTT/M/ySOFD/IQ";
+      const youtubeLink = "https://www.youtube.com/shorts/FuyHOpP15xY";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const watchVideoBtn = document.getElementById("watchVideoBtn");
+        const unlockAirdropBtn = document.getElementById("unlockAirdropBtn");
+        const passwordSection = document.getElementById("passwordSection");
+        const btnContainer = document.querySelector(".btn-container");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links"); // Updated to nav-links
+        let clickCount = 0;
+
+        if (!watchVideoBtn || !unlockAirdropBtn) {
+          console.error("One or both buttons not found in the DOM!");
+          return;
+        }
+
+        watchVideoBtn.addEventListener("click", function () {
+          clickCount++;
+          console.log("Click count:", clickCount);
+
+          if (clickCount === 1 || clickCount === 2) {
+            const newWindow = window.open(affiliateLink, "_blank");
+            if (!newWindow) {
+              console.warn("Popup blocked! Please allow popups for this site.");
+            }
+          } else if (clickCount >= 3) {
+            window.open(youtubeLink, "_blank");
+          }
+          if (clickCount >= 3) {
+            unlockAirdropBtn.disabled = false;
+          }
+        });
+
+        unlockAirdropBtn.addEventListener("click", function () {
+          window.open(aff_link_2, "_blank");
+          btnContainer.style.display = "none";
+          passwordSection.style.display = "block";
+          document.getElementById("passwordInput").focus();
+        });
+
+        // Hamburger menu toggle
+        hamburger.addEventListener("click", function () {
+          navLinks.classList.toggle("active"); // Updated to nav-links
+        });
+      });
+
+      function checkPassword() {
+        const passwordInput = document.getElementById("passwordInput").value;
+        const passwordMessage = document.getElementById("passwordMessage");
+        const passwordSection = document.getElementById("passwordSection");
+        const emailSection = document.getElementById("emailSection");
+
+        if (passwordInput === CORRECT_PASSWORD) {
+          passwordSection.style.display = "none";
+          emailSection.style.display = "block";
+          document.getElementById("emailInput").focus();
+          passwordMessage.textContent = "";
+        } else {
+          passwordMessage.textContent = "Incorrect password. Try again.";
+          passwordMessage.className = "error";
+        }
+      }
+
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbxz-coc1FJSVR6HL4NPWLudIpaFUuA46EWkRQ1rqlPkkGEeSIc5oTkBgLza6qwz35Ca8w/exec";
+
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      async function submitEmail() {
+        const emailInput = document.getElementById("emailInput");
+        const messageDiv = document.getElementById("message");
+        const email = emailInput.value.trim();
+
+        if (!validateEmail(email)) {
+          messageDiv.textContent = "Please enter a valid email address";
+          messageDiv.className = "error";
+          return;
+        }
+
+        try {
+          messageDiv.textContent = "Submitting...";
+          messageDiv.style.color = "#666";
+
+          const response = await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+              timestamp: new Date().toISOString(),
+            }),
+          });
+
+          messageDiv.textContent =
+            "You have successfully participated in the airdrop. We will notify you at the earliest opportunity regarding any further updates. Thank you!";
+          messageDiv.className = "success";
+          emailInput.value = "";
+        } catch (error) {
+          messageDiv.textContent = "Error submitting email. Please try again.";
+          messageDiv.className = "error";
+          console.error("Error:", error);
+        }
+      }
+
+      function doPost(e) {
+        try {
+          const data = JSON.parse(e.postData.contents);
+          const email = data.email;
+          const timestamp = data.timestamp;
+
+          const sheet = SpreadsheetApp.getActiveSheet();
+          sheet.appendRow([email, timestamp]);
+
+          return ContentService.createTextOutput(
+            JSON.stringify({ result: "success", message: "Email added" })
+          ).setMimeType(ContentService.MimeType.JSON);
+        } catch (error) {
+          return ContentService.createTextOutput(
+            JSON.stringify({ result: "error", message: error.toString() })
+          ).setMimeType(ContentService.MimeType.JSON);
+        }
+      }
+
+      function scrollToAirdrop() {
+        const airdropSection = document.querySelector("h1:not(.hero-title)");
+        if (airdropSection) {
+          airdropSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      document
+        .getElementById("passwordInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            checkPassword();
+          }
+        });
+
+      document
+        .getElementById("emailInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            submitEmail();
+          }
+        });
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'921a52dac86ded8b',t:'MTc0MjE5MTc4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

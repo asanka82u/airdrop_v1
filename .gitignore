@@ -1,0 +1,4 @@
+// Purpose: Ignore files and directories that are not needed in the repository
+// Usage: Add this file to the root of the repository
+/node_modules
+/dist
